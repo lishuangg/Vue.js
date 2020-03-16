@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<script src="vue.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+ 	<!--<div id="app01">
+		{{message}}
+	</div>
+	<script type="text/javascript">
+		var app = new Vue({ //构建一个vuejs的对象
+			el:'#app01', //element元素
+			data:{  //保存数据并初始化赋值
+				message:"hello world！"
+			}
+		});
+	</script> -->
+	
+	<!-- <div id="app02">
+		{{a}}
+	</div>
+	
+	<script type="text/javascript">
+		var data = { a : 1 };
+		var vm = new Vue({
+			el   : "#app02",
+			data : data
+		});
+		// data.a = 'hi...new...'
+		vm.a = 'test';
+		vm.$data.a = "test"
+		// data.a == vm.a;
+		vm.$watch('a',function(newval,oldval){ //观察变量前后的变化
+			console.log(newval,oldval);
+		})
+	</script> -->
+	
+	<!-- <div id="app03">
+		{{msg}}
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app03",
+		data : {
+			msg : "hi vue",
+		},
+		//在实例初始化之后，数据观测 (data observer) 和 event/watcher 事件配置之前被调用。
+		beforeCreate:function(){
+			console.log('beforeCreate');
+		},
+		/* 在实例创建完成后被立即调用。
+		在这一步，实例已完成以下的配置：数据观测 (data observer)，属性和方法的运算，watch/event 事件回调。
+		然而，挂载阶段还没开始，$el 属性目前不可见。 */
+		created	:function(){
+			console.log('created');
+		},
+		//在挂载开始之前被调用：相关的渲染函数首次被调用
+		beforeMount : function(){
+			console.log('beforeMount');
+		},
+		//el 被新创建的 vm.$el 替换, 挂在成功	
+		mounted : function(){
+			console.log('mounted');
+		},
+		//数据更新时调用
+		beforeUpdate : function(){
+			console.log('beforeUpdate');
+		},
+		//组件 DOM 已经更新, 组件更新完毕 
+		updated : function(){
+			console.log('updated');
+		}
+	});
+	setTimeout(function(){
+		vm.msg = "change ......";
+	}, 3000);
+	</script> -->
+	
+	<div id="app04">
+		{{msg}}
+		<p>Using mustaches: {{ rawHtml }}</p>
+		<p v-html="rawHtml"></p>
+		<!-- v-bind:属性="" -->
+		<div v-bind:class="color">test...</div>
+		<!-- 变量的算数运算 -->
+		<p>{{number + 1}}</p>
+		<!-- 变量的比较运算 -->
+		<p>{{ok?"YES":"NO"}}</p>
+		<!-- 函数运算 -->
+		<p>{{ message.split('').reverse().join('') }}</p>
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app04",
+		data : {
+			msg : "hi vue",
+			rawHtml : '<span style="color:red">this is should be red</span>',
+			color:'red',
+			number:10,
+			ok:1,
+			message:"vue"
+		}
+	});
+	</script>
+	<style type="text/css">
+		.red{color:red;font-size:100px}
+	</style>
+	
+	<div id="app05">
+		<!-- v-bind:class 动态切换class -->
+		<div 
+		class="test" 
+		v-bind:class="[ isActive ? 'active' : '', isGreen ? 'green' : '']" 
+		style="width:200px; height:200px; text-align:center; line-height:200px;">
+			hi vue
+		</div>
+		<!-- v-bind:style 动态切换style -->
+		<div 
+		:style="{color:color, fontSize:size, background: isRed ? '#FF0000' : ''}">
+			hi vue
+		</div>
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app05",
+		data : {
+			isActive : true,
+			isGreen : true,
+			color : "#FFFFFF",
+			size : '50px',
+			isRed : true
+		}
+	});
+	</script>
+	<style>
+	.test{font-size:30px;}
+	.green{color:#00FF00;}
+	.active{background:#FF0000;}
+	</style>
+	
+	<!-- <div id="app06">
+		<div v-if="type === 'A'">
+		  A
+		</div>
+		<div v-else-if="type === 'B'">
+		  B
+		</div>
+		<div v-else-if="type === 'C'">
+		  C
+		</div>
+		<div v-else>
+		  Not A/B/C
+		</div>
+		<h1 v-show="ok">Hello!</h1>
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app06",
+		data : {
+			type : "B",
+			ok : false
+		}
+	});
+	</script> -->
+	
+	<div id="app07">
+		<ul>
+			<!-- :key="index" 就是 v-bind:key="index" -->
+			<li v-for="item,index in items" :key="index">
+			{{index}}{{ item.message }}
+			</li>
+		</ul>
+		<ul>
+			<li v-for="value, key in object">
+				{{key}} : {{ value }}
+			</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app07",
+		data : {
+			items : [
+				{ message: 'Foo' },
+				{ message: 'Bar' }
+			],
+			object: {
+				title: 'How to do lists in Vue',
+				author: 'Jane Doe',
+				publishedAt: '2016-04-10'
+			}
+		}
+	});
+	</script>
+
+	<div id="app08">
+		<div id="example-1">
+			<button v-on:click="counter += 1"> 数值 :  {{ counter }} </button><br />
+			<button v-on:dblclick="greet('abc', $event)">Greet</button>
+			<!-- dblclick 双击 -->
+		</div>
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app08",
+		data : {
+			counter: 0,
+			name : "vue"
+		},
+		methods:{
+			greet : function (str, e) {
+				alert(str);
+				console.log(e);
+			}
+		}
+	});
+	</script>
+
+<!-- 	<div id="app09">
+		<div id="example-1">
+			<input v-model="message" placeholder="edit me">
+			<p>Message is: {{ message }}</p>
+			<textarea v-model="message2" placeholder="add multiple lines"></textarea>
+			<p style="white-space: pre-line;">{{ message2 }}</p>
+			<br />
+			
+			<div style="margin-top:20px;">
+				<input type="checkbox" id="zhao" value="zhao" v-model="checkedNames">
+				<label for="zhao">zhao</label>
+				<input type="checkbox" id="qian" value="qian" v-model="checkedNames">
+				<label for="qian">qian</label>
+				<input type="checkbox" id="sun" value="sun" v-model="checkedNames">
+				<label for="sun">sun</label>
+				<br>
+				<span>Checked names: {{ checkedNames }}</span>
+			</div>
+			
+			<div style="margin-top:20px;">
+				<input type="radio" id="one" value="One" v-model="picked">
+				<label for="one">One</label>
+				<br>
+				<input type="radio" id="two" value="Two" v-model="picked">
+				<label for="two">Two</label>
+				<br>
+				<span>Picked: {{ picked }}</span>
+			</div>
+			<button type="button" @click="submit">提交</button>
+		</div>
+		
+	</div>
+	<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app09",
+		data : {
+			message : "test",
+			message2 :"hi",
+			checkedNames : ['qian','sun'],//选中的值
+			picked : "Two"
+		},
+		methods: {
+			submit : function () {//获取表单中的值
+				console.log(this.message);
+				var postVal = {
+					msg1:this.message,
+					msg2:this.message2,
+					checkVal:this.checkedNames,
+					pickVal:this.picked
+				}
+				console.log(postVal);
+			}
+		}
+	});
+	</script> -->
+
+	<div id="app10">
+		<button-counter title="title1 : " @clicknow="clicknow">
+			<h2>hi...h2</h2>
+		</button-counter>
+		<button-counter title="title2 : "></button-counter>
+		<!-- 每个组件都会各自独立维护它的 count。因为你每用一次组件，就会有一个它的新实例被创建。 -->
+	</div>
+	<script type="text/javascript">
+	//创建组件
+	Vue.component('button-counter', {
+		props: ['title'],
+		data: function () {
+			return {
+			  count: 0
+			}
+		},
+		//组件模板,使用多个标签要包裹在一个标签中
+		template: '<div><h1>hi...</h1><button v-on:click="clickfun">{{title}} You clicked me {{ count }} times.</button><slot></slot></div>',
+		methods:{
+			clickfun : function () {
+				this.count ++;
+				//通过emit方法出发clicknow函数
+				this.$emit('clicknow', this.count);//事件名称,可携带的参数
+			}
+		}
+	})
+	var vm = new Vue({
+		el : "#app10",
+		data : {
+			
+		},
+		methods:{
+			clicknow : function (e) {
+				console.log(e);
+			}
+		}
+	});
+	</script>
+
+	<div id="app11">
+		<button-counter></button-counter>
+		<test></test>
+	</div>
+	<script type="text/javascript">
+		//全局注册
+	Vue.component('button-counter', {
+		props: ['title'],
+		data: function () {
+			return {}
+		},
+		template: '<div><h1>hi...</h1></div>',
+		methods:{
+			
+		}
+	})
+	var vm = new Vue({
+		el : "#app11",
+		data : {
+			
+		},
+		methods:{
+			clicknow : function (e) {
+				console.log(e);
+			}
+		},
+		//局部注册
+		components:{
+			test : {
+				template:"<h2>h2...</h2>"
+			}
+		}
+	});
+	</script>
+</body>
+</html>
