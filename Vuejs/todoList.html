@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TodoList</title>
+  <script src="./vue.js"></script>
+</head>
+<body style="background:#bbbbbb;">
+  <div id="root">
+    <div id="header" style="width:100%;background:#000000;">
+		<div style="width:750px;margin:0 auto;">
+			<label style="color:#ffffff;font-size:30px;">ToDoList</label>
+			<!-- v-model 在input上面创建双向绑定 -->
+			<input v-model="inputValue" style="width:400px;margin:10px;padding:5px;border-radius:8px;border:none;background:#eeeeee;font-size:20px;"/>
+			<!-- v-bind 缩写 : -->
+			<!-- v-on 缩写 @ -->
+			<button @click="submit">提交</button>
+		</div>
+    </div>
+	<div style="width:750px;margin:30px auto;">
+		<label style="font-size:25px;font-weight:bold;">正在进行</label>
+		<ul style="list-style:none">
+			<todo-item 
+				v-for="(item,index) of doingList" 
+				:key="index" 
+				:content="item"
+				:index="index"
+				@delete="handleDelete"
+				@todo="handleToDo"
+			></todo-item> 
+		</ul>
+		<label style="font-size:25px;font-weight:bold;">已经完成</label>
+		<ul style="list-style:none">
+			<todo-item
+				v-for="(item,index) of doneList" 
+				:key="index" 
+				:content="item"
+				:index="index"
+				@delete="handleDelete"
+				@todo="handleToDo"
+			></todo-item> 
+		</ul>
+	</div>
+  </div>
+
+  <script>
+	//注册全局组件
+	Vue.component('todo-item',{
+		// 需要让组件接收属性props，其值为一个数组'content'即外部传递的进来的名字叫做 content 的属性
+		props: ['content','index'],
+	    template: '<li style="margin:10px;width:600px;height:30px;border:1px solid #dddddd;background:#eeeeee;border-radius:8px;line-height:30px;"><div @click="handleClick" style="float:left;"><input type="radio" :checked="content.finish"/>{{content.text}}</div><button @click="handleClickDelete" style="float:right;">删除</button></li>',
+		methods: {
+			handleClickDelete: function(){
+				// vm.$emit(event,arg) //触发当前实例上的事件
+				// vm.$on(event,fn); //监听event事件后运行fn；
+				// 自定义一个'delete'事件。调用this.$emit方法，并传递index的值
+				this.$emit('delete',this.index);
+			},
+			handleClick: function() {
+				this.$emit('todo',this.content,this.index);
+			}
+		}
+	})
+	//注册局部组件
+	// var todoItem = {
+	// 	template: '<li>item</li>'
+	// }
+	// new Vue({
+	// 	el: "#root",
+	// 	components:{ 
+	// 	//组件声明,使用 components 对该局部组件进行注册
+	// 	//todoItem 这个局部组件，要通过 item 这个标签来使用
+	// 		'item':todoItem
+	// 	}
+	// })
+    new Vue({
+		el: "#root",
+		// components:{ 
+		// //组件声明,使用 components 对该局部组件进行注册
+		// //todoItem 这个局部组件，要通过 item 这个标签来使用
+		// 	'item':todoItem
+		// }
+		data: {
+			inputValue: '',
+			doingList: [],
+			doneList: []
+		},
+		methods: {
+			submit: function(){
+				if(this.inputValue != ''){
+					this.doingList.unshift({text:this.inputValue,finish:false});
+					this.inputValue = ''
+				}else{
+					alert("输入不能为空");
+				}
+			},
+			handleDelete: function(index){
+				this.doingList.splice(index,1)  //使用splice方法删除list
+			},
+			handleToDo: function(content,index){
+				if(!content.finish){
+					this.doingList.splice(index,1)
+					this.doneList.unshift({text:content.text,finish:true})
+				}else{
+					this.doneList.splice(index,1)
+					this.doingList.unshift({text:content.text,finish:false})
+				}
+			}
+		}
+    })
+  </script>
+</body>
+</html>
