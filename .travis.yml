@@ -3,7 +3,7 @@ node_js:
     - "node"
 
 install:
- - npm install -g vue-cli
+ - yarn global add @vue/cli
  
 after_script:
     - npm run build
