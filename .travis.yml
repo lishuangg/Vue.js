@@ -2,8 +2,11 @@ nguage: node_js
 node_js:
     - "node"
 
+install:
+ - npm install -g vue-cli
+ 
 after_script:
-    - run build
+    - npm run build
     - cd ./my-project/dist
     - git init
     - git config user.name "${USER_NAME}"
