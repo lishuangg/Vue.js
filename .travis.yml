@@ -6,7 +6,7 @@ install:
  - yarn global add @vue/cli
  
 after_script: 
-- cd ./my-project
+	- cd ./my-project
     - npm run build
     - cd ./dist
     - git init
