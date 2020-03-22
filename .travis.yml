@@ -3,7 +3,7 @@ node_js:
     - "node"
 
 after_script:
-    - vue build
+    - Vue build
     - cd ./my-project/dist
     - git init
     - git config user.name "${USER_NAME}"
