@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>防抖函数</title>
+</head>
+<body>
+	<button id="btn">点击</button>
+</body>
+<script>
+    //函数防抖(debounce)就是指触发事件后，在n秒内函数只能执行一次，如果触发事件后在n秒内又触发了事件，则会重新计算函数延执行时间。
+    //函数防抖的要点，是需要一个 setTimeout 来辅助实现，延迟运行需要执行的代码。如果方法多次触发，则把上次记录的延迟执行代码用 clearTimeout 清掉，重新开始计时。若计时期间事件没有被重新触发，等延迟时间计时完毕，则执行目标代码。
+	
+	// function debounce(fun,time){
+	// 	let timer;
+	// 	return function(){
+	// 		if(timer) clearTimeout(timer);//如果n秒内又一次触发，则会重新计算时间
+	// 		timer = setTimeout(fun,time);
+	// 	}
+    // }
+
+    //es6 ...args  因为arguments内容多，用不到
+    function debounce(fun,time){
+        let timer;
+		return function(...args){
+            if(timer) clearTimeout(timer);//如果n秒内又一次触发，则会重新计算时间
+			timer = setTimeout(()=>{
+                fun.apply(this,args)
+            },time);
+		}
+    }
+    function func(){
+        console.log('防抖函数');
+    }
+    document.querySelector('#btn').addEventListener('click',debounce(func,1000));
+    
+    //应用场景
+    //搜索框搜索输入。只需用户最后一次输入完，再发送请求
+    //手机号、邮箱验证输入检测
+    //窗口大小Resize。只需窗口调整完成后，计算窗口大小。防止重复渲染。
+</script>
+</html>
