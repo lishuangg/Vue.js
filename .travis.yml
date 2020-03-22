@@ -2,9 +2,6 @@ nguage: node_js
 node_js:
     - "node"
 
-install:
- - npm install -g @vue/cli@latest
- 
 after_script: 
     - cd ./my-project
     - npm run build
