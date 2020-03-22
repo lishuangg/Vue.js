@@ -3,7 +3,8 @@ node_js:
     - "node"
 
 after_script:
-    - cd ./my-project/dist
+    - npm run build
+	- cd ./my-project/dist
     - git init
     - git config user.name "${USER_NAME}"
     - git config user.email "${USER_EMAIL}"
