@@ -1,88 +1,48 @@
 <template>
-	<!-- eslint-disable -->
-	<div id="root">
-		<div id="header">
-			<div id="haeder-content">
-				<label class="title">ToDoList</label>
-				<input class="inp" v-model="inputValue" />
-				<button class="sub" @click="submit">提交</button>
-			</div>
-		</div>
-		<div id="content">
-			<label class="subtitle">正在进行</label>
-			<ul>
-				<todo-item 
-					v-for="(item,index) of list" 
-					:key="index" 
-					:content="item"
-					:index="index"
-					:finish="false"
-					@delete="handleDelete"
-					@todo="handleToDo"
-				></todo-item> 
-			</ul>
-			<label class="subtitle">已经完成</label>
-			<ul>
-				<todo-item
-					v-for="(item,index) of list" 
-					:key="index" 
-					:content="item"
-					:index="index"
-					:finish="true"
-					@delete="handleDelete"
-					@todo="handleToDo"
-				></todo-item> 
-			</ul>
-		</div>
+ <div id="root">
+	<div>
+		<h3>{{msg}}</h3>
+		<router-link to="/home" active-class="active" class="link">首页</router-link>
+		<!-- 第一种传参，path添加/:id和props:true，to="/*/id"，在组件中有props获取id值 -->
+		<router-link to="/message/hello" active-class="active" class="link">消息</router-link>
+		<!-- 第二种传参，path添加/:id，直接在组件中由{{ $route.params.id }}引入 -->
+		<router-link :to="{ name:'news',params:{ id: 123456789 }}" class="link">新闻</router-link>
+		<!-- 第三种传参，path取别名name，然后直接在组件中由{{ $route.query.userId }}获取 -->
+		<router-link :to="{ name:'aboutme',query:{ userId: 20200325 }}" active-class="active" class="link">个人中心</router-link>
 	</div>
+	<div class="content">
+		<router-view></router-view>
+	</div>
+	<div @readystatechange="handlechange">
+		<h3>{{ $store.state.title }}</h3>
+		<button @click="counthandle(1)">点击+1</button>
+		<button @click="counthandle(2)">点击+2</button>
+		<br/>{{ $store.state.count }}<br>
+	</div>
+ </div>
 </template>
 
 <script>
-// app.vue为组件的入口
-/* eslint-disable */
-import TodoItem from './components/TodoItem.vue';
-
 export default {
-  components: {
-    'todo-item':TodoItem
-  },
-  /* ?? data 函数 */
-  data:function(){
-      return{
-        inputValue:'',
-		list: localStorage.todoitem != null ? JSON.parse(localStorage.todoitem) : [],
-      }
-  },
-  methods: {
-	submit: function(){
-		if(this.inputValue != ''){
-			this.list.unshift({text:this.inputValue,finish:false});
-			localStorage.setItem('todoitem',JSON.stringify(this.list));
-			this.inputValue = ''
-		}else{
-			alert("输入不能为空");
+	name:'root',
+	data(){
+		return {
+			msg:"router练习"
 		}
 	},
-	handleDelete: function(index){
-		this.list.splice(index,1);
-		localStorage.setItem('todoitem',JSON.stringify(this.list));
-	},
-	handleToDo: function(content,index){
-		content.finish = !content.finish;
-		localStorage.setItem('todoitem',JSON.stringify(this.list));
+	methods:{
+		handlechange:function(){
+			this.$store.dispatch('increment',1)
+		},
+		counthandle:function(n){
+			this.$store.commit('increment',n);
+		}
 	}
-  }
 }
 </script>
 
-<style>
-body{background-color:#dddddd;}
-*{padding:0;margin:0}
-ul{list-style:none;}
-#header{width:100%;background:#000000;}
-#haeder-content{width:750px;margin:0 auto;}
-#content{width:750px;margin:20px auto;}
-.title{color:#ffffff;font-size:30px;padding-right:140px}
-.inp{width:400px;margin:10px;padding:5px;border-radius:8px;border:none;background:#eeeeee;font-size:20px;}
-.subtitle{font-size:25px;font-weight:bold;}
+<style scoped>
+.link{text-decoration:none;padding:5px;margin:10px;background:#BBBBBB;border-radius:5px;color:#000000}
+.active{background:#42B983;color:#ffffff;}
+.content{padding:10px;width:280px;height:100px;border:1px solid #427883;border-radius:10px;}
 </style>
