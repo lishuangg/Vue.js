@@ -1,48 +1,42 @@
 <template>
  <div id="root">
-	<div>
-		<h3>{{msg}}</h3>
-		<router-link to="/home" active-class="active" class="link">首页</router-link>
-		<!-- 第一种传参，path添加/:id和props:true，to="/*/id"，在组件中有props获取id值 -->
-		<router-link to="/message/hello" active-class="active" class="link">消息</router-link>
-		<!-- 第二种传参，path添加/:id，直接在组件中由{{ $route.params.id }}引入 -->
-		<router-link :to="{ name:'news',params:{ id: 123456789 }}" class="link">新闻</router-link>
-		<!-- 第三种传参，path取别名name，然后直接在组件中由{{ $route.query.userId }}获取 -->
-		<router-link :to="{ name:'aboutme',query:{ userId: 20200325 }}" active-class="active" class="link">个人中心</router-link>
+	<div id="header">
+		<div class="head">
+			<div id="left">
+				<img style="height:30px;margin-right:20px;" src="https://static2.cnodejs.org/public/images/cnodejs_light.svg"/>
+				<input class="inp" />
+			</div>
+			<div id="right">
+				<router-link to="/home" active-class="active" class="link">首页</router-link>
+				<router-link to="/newhand" active-class="active" class="link">新手入门</router-link>
+				<router-link to="/api" active-class="active" class="link">API</router-link>
+				<router-link to="/about" active-class="active" class="link">关于</router-link>
+				<router-link to="/register" active-class="active" class="link">注册</router-link>
+				<router-link to="/login" active-class="active" class="link">登录</router-link>
+			</div>
+		</div>
 	</div>
 	<div class="content">
 		<router-view></router-view>
-	</div>
-	<div @readystatechange="handlechange">
-		<h3>{{ $store.state.title }}</h3>
-		<button @click="counthandle(1)">点击+1</button>
-		<button @click="counthandle(2)">点击+2</button>
-		<br/>{{ $store.state.count }}<br>
 	</div>
  </div>
 </template>
 
 <script>
 export default {
-	name:'root',
-	data(){
-		return {
-			msg:"router练习"
-		}
-	},
-	methods:{
-		handlechange:function(){
-			this.$store.dispatch('increment',1)
-		},
-		counthandle:function(n){
-			this.$store.commit('increment',n);
-		}
-	}
+	name:'root'
 }
 </script>
 
-<style scoped>
-.link{text-decoration:none;padding:5px;margin:10px;background:#BBBBBB;border-radius:5px;color:#000000}
-.active{background:#42B983;color:#ffffff;}
-.content{padding:10px;width:280px;height:100px;border:1px solid #427883;border-radius:10px;}
+<style>
+*{padding:0;margin:0}
+body{background: #eeeeee;}
+#header{width:100%;background:#333333;}
+.head{width:90%;height:40px;margin:0 auto;}
+#left{width:60%;float: left;}
+#right{width:40%;float: left;}
+.inp{width:300px;padding:3px;border-radius:8px;border:none;background:#eeeeee;font-size:20px;}
+.link{text-decoration:none;margin:0 15px;color:#bbbbbb;line-height:40px;float:left;}
+.active{color:#ffffff;}
+.content{width:80%;margin:20px auto;background: #ffffff;border-radius:5px;}
 </style>
